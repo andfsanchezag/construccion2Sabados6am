@@ -6,10 +6,11 @@ import java.util.Map;
 import app.controller.validator.UserValidator;
 import app.dto.UserDto;
 import app.service.Service;
+import app.service.interfaces.LoginService;
 
 public class LoginController implements ControllerInterface{
 	private UserValidator userValidator;
-	private Service service;
+	private LoginService service;
 	private static final String MENU= "ingrese la opcion que desea: \n 1. para iniciar sesion. \n 2. para detener la ejecucion.";
 	private Map<String,ControllerInterface> roles;
 	public LoginController() {
@@ -69,9 +70,10 @@ public class LoginController implements ControllerInterface{
 		userDto.setPassword(password);
 		userDto.setUserName(userName);
 		this.service.login(userDto);
-		if(roles.get(userDto.getRole())!=null) {
-			roles.get(userDto.getRole()).session();
+		if(roles.get(userDto.getRole())==null) {
+			throw new Exception ("Rol invalido");
 		}
+		roles.get(userDto.getRole()).session();
 		
 	}
 	
